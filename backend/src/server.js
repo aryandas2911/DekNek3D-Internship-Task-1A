@@ -3,7 +3,7 @@ import cors from "cors";
 import multer from "multer";
 import path from "path";
 import { glb_convert } from "../converters/glb_converter.js";
-
+import fs from "fs";
 
 const app = express();
 const PORT = 8000;
@@ -48,6 +48,8 @@ app.post("/upload", upload.single("document"), async (req, res) => {
 
     const outputFilePath = await glb_convert(inputFilePath, outputFormat);
     const fileName = path.basename(outputFilePath);
+    console.log("file Deleted:", inputFilePath);
+    await fs.promises.unlink(inputFilePath);
     res.json({
   message: "File processed successfully",
   downloadUrl: `http://localhost:${PORT}/download/${fileName}`
@@ -57,17 +59,30 @@ app.post("/upload", upload.single("document"), async (req, res) => {
   }
 });
 
+
+
 app.get("/download/:filename", (req, res) => {
   const fileName = req.params.filename;
   const filePath = path.join(process.cwd(), "output", fileName);
 
-  res.download(filePath, fileName, (err) => {
+  res.download(filePath, fileName, async (err) => {
     if (err) {
-      console.error(err);
-      res.status(404).json({ error: "File not found" });
+      console.error("Download error:", err);
+      if (!res.headersSent) {
+        res.status(404).json({ error: "File not found" });
+      }
+    } else {
+      // ✅ delete file after successful download
+      try {
+        await fs.promises.unlink(filePath);
+        console.log(`Deleted file: ${fileName}`);
+      } catch (deleteErr) {
+        console.error("Delete failed:", deleteErr);
+      }
     }
   });
 });
+
 
 
 

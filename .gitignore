@@ -1,60 +1,78 @@
-$Content = @'
-# Node modules
+############################
+# Dependencies
+############################
 node_modules/
-.next/
+.pnpm-store/
 
-# Python
-venv/
-backend/venv/
-__pycache__/
-*.pyc
-
-# Uploaded & generated files
-uploads/
-outputs/
-
-# Blender cache / temp
-*.blend
-*.blend1
-
-# OS junk
-.DS_Store
-Thumbs.db
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Build / output
+############################
+# Build outputs
+############################
 dist/
 build/
-**/outputs/
-**/uploads/
-outputs/
-backend/uploads/
-backend/outputs/
+.next/
+.vite/
+.cache/
+.parcel-cache/
 
+############################
+# Environment variables
+############################
+.env
+.env.*
+!.env.example
+
+############################
+# Runtime generated files
+# (keep folders, ignore contents)
+############################
+backend/uploads/*
+backend/output/*
+
+!backend/uploads/.gitkeep
+!backend/output/.gitkeep
+
+############################
 # Logs
+############################
 logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
 
-# Coverage
+############################
+# Coverage / test
+############################
 coverage/
 .nyc_output/
 
-# Editor / OS files
+############################
+# Python (if used for tools)
+############################
+venv/
+backend/venv/
+__pycache__/
+*.pyc
+
+############################
+# Blender / 3D temp files
+############################
+*.blend
+*.blend1
+
+############################
+# Editor / OS junk
+############################
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 
+############################
 # Misc
-*.bak
+############################
 *.tmp
-'@
-
-Set-Content -Path "c:\Users\jafri\OneDrive\Desktop\internship\task1\DekNek3D-Internship-Task-1A\.gitignore" -Value $Content -Encoding utf8
+*.bak
+*.swp
+*.tsbuildinfo
+.eslintcache
