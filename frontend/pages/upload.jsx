@@ -18,18 +18,13 @@ function Upload() {
 
     try {
       setLoading(true);
-
       const formData = new FormData();
-      formData.append("document", file); // must match multer.single("file")
+      formData.append("document", file);
       formData.append("format", format);
 
       const res = await uploadFile(formData);
-      console.log(res.data.downloadUrl);
-      // trigger download
-      
       window.location.href = res.data.downloadUrl;
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError("Upload or conversion failed");
     } finally {
       setLoading(false);
@@ -37,38 +32,54 @@ function Upload() {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>GLB File Converter</h2>
+    <div className="app-shell">
+      <div className="tool">
+        <div className="tool-card">
+          <header className="tool-header">
+            <h1 className="tool-title">GLB Converter</h1>
+            <p className="tool-subtitle">
+              Convert 3D models into production-ready formats.
+            </p>
+          </header>
 
-      <form onSubmit={handleUpload}>
-        {/* File input */}
-        <input
-          type="file"
-          accept=".glb"
-          onChange={(e) => setFile(e.target.files[0])}
-        />
+          <form className="tool-form" onSubmit={handleUpload}>
+            <div className="form-group">
+              <label className="form-label">3D Model</label>
+              <input
+                type="file"
+                accept=".glb"
+                className="file-input"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+            </div>
 
-        <br /><br />
+            <div className="form-group">
+              <label className="form-label">Output Format</label>
+              <select
+                className="select-input"
+                value={format}
+                onChange={(e) => setFormat(e.target.value)}
+              >
+                <option value="obj">OBJ</option>
+                <option value="stl">STL</option>
+                <option value="ply">PLY</option>
+                <option value="fbx">FBX</option>
+                <option value="3mf">3MF</option>
+                <option value="glb">Optimized GLB</option>
+                <option value="gltf">Optimized GLTF</option>
+              </select>
+            </div>
 
-        {/* Format dropdown */}
-        <select value={format} onChange={(e) => setFormat(e.target.value)}>
-          <option value="obj">OBJ</option>
-          <option value="stl">STL</option>
-          <option value="ply">PLY</option>
-          <option value="fbx">FBX</option>
-          <option value="3mf">3MF</option>
-          <option value="glb">Optimized GLB</option>
-          <option value="gltf">Optimized GLTF</option>
-        </select>
+            <div className="action-area">
+              <button className="primary-btn" disabled={loading}>
+                {loading ? "Generating…" : "Generate"}
+              </button>
+            </div>
 
-        <br /><br />
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Converting..." : "Upload & Convert"}
-        </button>
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </form>
+            {error && <p className="form-error">{error}</p>}
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

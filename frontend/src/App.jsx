@@ -1,13 +1,9 @@
 import { useState } from 'react'
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Upload from '../pages/upload'
-import './App.css'
+import Upload from '../pages/upload.jsx'
 
-const handleUpload = async () => {
-  
-    
-}
+
 function App() { 
   return (
     <Router>

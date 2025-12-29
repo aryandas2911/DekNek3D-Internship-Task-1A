@@ -4,9 +4,12 @@ import multer from "multer";
 import path from "path";
 import { glb_convert } from "../converters/glb_converter.js";
 import fs from "fs";
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
@@ -14,6 +17,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
+
+if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
+if (!fs.existsSync("output")) fs.mkdirSync("output");
 
 //upload using multer
 const storage = multer.diskStorage({
