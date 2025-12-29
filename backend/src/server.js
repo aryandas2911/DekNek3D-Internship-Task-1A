@@ -58,7 +58,7 @@ app.post("/upload", upload.single("document"), async (req, res) => {
     await fs.promises.unlink(inputFilePath);
     res.json({
   message: "File processed successfully",
-  downloadUrl: `http://localhost:${PORT}/download/${fileName}`
+  downloadUrl: `${process.env.BACKEND_URL}/download/${fileName}`,
 });
   } catch (err) {
     res.status(500).json({ error: err.message });
