@@ -1,22 +1,18 @@
-import { exec } from "child_process";
+import { execFile } from "child_process";
 import path from "path";
 
-const pythonCmd = "venv\\Scripts\\python.exe";
-const scriptPath = "python_scripts/glb_converter.py";
+const pythonCmd = "python";
+const scriptPath = path.join("python_scripts", "glb_converter.py");
 
 export function glb_convert(inputFilePath, outputFormat) {
   return new Promise((resolve, reject) => {
-    exec(
-      `"${pythonCmd}" "${scriptPath}" "${inputFilePath}" "${outputFormat}"`,
+    execFile(
+      pythonCmd,
+      [scriptPath, inputFilePath, outputFormat],
       (error, stdout, stderr) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        if (stderr) {
-          console.warn(`stderr: ${stderr}`);
-        }
-        resolve(stdout.trim()); // output file path
+        if (error) return reject(error);
+        if (stderr) console.warn(stderr);
+        resolve(stdout.trim());
       }
     );
   });
